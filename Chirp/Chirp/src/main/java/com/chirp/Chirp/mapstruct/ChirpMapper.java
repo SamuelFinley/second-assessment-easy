@@ -14,26 +14,26 @@ import com.chirp.Chirp.entity.Chirp;
 @Mapper(componentModel = "spring")
 public interface ChirpMapper {
 	@Mappings({ 
-		@Mapping(source = "author", target = "author"),
-		@Mapping(source = "posted", target = "posted"), 
-		@Mapping(source = "content", target = "content")
+		@Mapping(source = "userDto", target = "author"),
+		@Mapping(source = "simpleChirp.posted", target = "posted"), 
+		@Mapping(source = "simpleChirp.content", target = "content")
 		})
-	Chirp fromSimpleDto(SimpleChirpDto simpleChirp);
+	Chirp fromSimpleDto(SimpleChirpDto simpleChirp, UserDto userDto);
 	
 	@Mappings({ 
-		@Mapping(source = "author", target = "author"),
-		@Mapping(source = "posted", target = "posted"), 
-		@Mapping(source = "repostOf", target = "repostOf")
+		@Mapping(source = "userDto", target = "author"),
+		@Mapping(source = "repost.posted", target = "posted"), 
+		@Mapping(source = "repost.repostOf", target = "repostOf")
 		})
-	Chirp fromRepostDto(RepostDto repost);
+	Chirp fromRepostDto(RepostDto repost, UserDto userDto);
 	
 	@Mappings({ 
-		@Mapping(source = "author", target = "author"),
-		@Mapping(source = "posted", target = "posted"), 
-		@Mapping(source = "content", target = "content"),
-		@Mapping(source = "replyTo", target = "reply")
+		@Mapping(source = "userDto", target = "author"),
+		@Mapping(source = "reply.posted", target = "posted"), 
+		@Mapping(source = "reply.content", target = "content"),
+		@Mapping(source = "reply.replyTo", target = "reply")
 		})
-	Chirp fromReplyDto(ReplyDto reply);
+	Chirp fromReplyDto(ReplyDto reply, UserDto userDto);
 	
 	@Mappings({ 
 		@Mapping(source = "author", target = "author"),

@@ -1,20 +1,22 @@
 package com.chirp.Chirp.dto;
 
+import javax.persistence.Embeddable;
+
 import org.springframework.beans.factory.annotation.Required;
 
-import com.chirp.Chirp.entity.Profile;
 
+@Embeddable
 public class UserDto {
 	
 	private String username;
-	private Profile profile;
+	private ProfileDto profile;
 	private Long joined;
 	
 	public UserDto() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public UserDto(String username, Profile profile, Long joined) {
+	public UserDto(String username, ProfileDto profile, Long joined) {
 		super();
 		this.username = username;
 		this.joined = joined;
@@ -30,12 +32,12 @@ public class UserDto {
 		this.username = username;
 	}
 
-	public Profile getProfile() {
+	public ProfileDto getProfile() {
 		return profile;
 	}
 	
 	@Required
-	public void setProfile(Profile profile) {
+	public void setProfile(ProfileDto profile) {
 		this.profile = profile;
 	}
 

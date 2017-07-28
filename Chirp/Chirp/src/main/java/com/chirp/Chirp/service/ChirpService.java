@@ -1,11 +1,12 @@
 package com.chirp.Chirp.service;
 
-import java.sql.Timestamp;
-import java.util.Collections;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
 
 import com.chirp.Chirp.dto.CredentialsDto;
 import com.chirp.Chirp.dto.GeneralChirpDto;
@@ -29,6 +30,7 @@ import com.chirp.Chirp.repository.ReplyRepository;
 import com.chirp.Chirp.repository.RepostRepository;
 import com.chirp.Chirp.repository.UserRepository;
 
+@Service
 public class ChirpService {
 	private HashtagRepository tagRepo;
 	private RepostRepository repostRepo;
@@ -97,7 +99,7 @@ public class ChirpService {
 	}
 	
 	public List<GeneralChirpDto> getAllVisible() {
-		List<Chirp> results = chirpRepo.getByVisibleTrue();
+		List<Chirp> results = chirpRepo.findByVisibleTrue();
 		return results.stream().map(chirpMapper::toGeneralChirpDto).collect(Collectors.toList());
 	}
 	
@@ -109,7 +111,8 @@ public class ChirpService {
 		UserDto userDto = userMapper.toDto(user);
 		Long timestamp = System.currentTimeMillis();
 		SimpleChirpDto littleChirp = new SimpleChirpDto(userDto, timestamp, simpleDto.getContent(), true);
-		Chirp chirp = chirpMapper.fromSimpleDto(littleChirp);
+		Chirp chirp = chirpMapper.fromSimpleDto(littleChirp, userDto);
+		chirp.setVisible(true);
 		for (String label : tags) {
 			Hashtag tag = new Hashtag(label, timestamp, chirp.getId());
 			tag.setLabel(label);
@@ -147,7 +150,8 @@ public class ChirpService {
 		Chirp first = chirpRepo.findByVisibleAndId(id);
 		Long timestamp = System.currentTimeMillis();
 		ReplyDto reply = new ReplyDto(userDto, timestamp, simpleDto.getContent(), chirpMapper.toGeneralChirpDto(first));
-		Chirp theReply = chirpMapper.fromReplyDto(reply);
+		Chirp theReply = chirpMapper.fromReplyDto(reply, userDto);
+		theReply.setVisible(true);
 		chirpRepo.save(theReply);
 		InReplyTo replyRelation = new InReplyTo(id, theReply.getId());
 		replyRepo.save(replyRelation);
@@ -161,7 +165,8 @@ public class ChirpService {
 		Chirp first = chirpRepo.findByVisibleAndId(id);
 		Long timestamp = System.currentTimeMillis();
 		RepostDto repost = new RepostDto(userDto, timestamp, chirpMapper.toGeneralChirpDto(first));
-		Chirp theRepost = chirpMapper.fromRepostDto(repost);
+		Chirp theRepost = chirpMapper.fromRepostDto(repost, userDto);
+		theRepost.setVisible(true);
 		chirpRepo.save(theRepost);
 		RepostOf repostRelation = new RepostOf(id, theRepost.getId());
 		repostRepo.save(repostRelation);

@@ -1,5 +1,6 @@
 package com.chirp.Chirp.entity;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +16,6 @@ public class Chirp {
 	@GeneratedValue
 	private Integer id;
 	
-	@OneToOne
 	private UserDto author;
 	private String content;
 	private Long posted;
